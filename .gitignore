@@ -15,6 +15,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### MacOS ###
+.DS_Store
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
