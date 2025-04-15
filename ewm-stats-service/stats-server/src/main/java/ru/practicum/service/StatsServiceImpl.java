@@ -30,9 +30,15 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional(readOnly = true)
     public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+
+        if (start == null || end == null) {
+            throw new ValidationException("Даты не переданы.");
+        }
+
         if (start.isAfter(end) || start.isEqual(end)) {
             throw new ValidationException("Даты противоречат друг другу!");
         }
+
         if (unique) {
             return repository.findAllWithUniqueIpTrue(start, end, uris);
         } else {
