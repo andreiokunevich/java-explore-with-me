@@ -28,7 +28,7 @@ services:
       interval: 5s
       retries: 10
 
-  ewm-main-service:
+  ewm-service:
     build: ewm-main-service
     image: ewm-main-service-image
     container_name: ewm-main
