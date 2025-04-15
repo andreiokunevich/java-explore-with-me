@@ -111,8 +111,6 @@ public class PublicEventServiceImpl implements PublicEventService {
                     })
                     .toList());
         } else {
-            Map<String, Long> viewsMap = new HashMap<>();
-
             result = new ArrayList<>(events.stream()
                     .map(event -> {
                         EventShortDto dto = EventMapper.toEventShortDto(event);
