@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -8,47 +9,42 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class BaseClient {
+
     protected final RestTemplate rest;
 
     public BaseClient(RestTemplate rest) {
         this.rest = rest;
     }
 
-    protected ResponseEntity<Object> get(@Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, "/stats?start={start}&end={end}&unique={unique}&uris={uris}", parameters, null);
+    protected <T> ResponseEntity<T> get(String path,
+                                        @Nullable Map<String, Object> parameters,
+                                        ParameterizedTypeReference<T> responseType) {
+        return makeAndSendRequest(HttpMethod.GET, path, parameters, null, responseType);
     }
 
-    protected <T> ResponseEntity<Object> post(T body) {
-        return makeAndSendRequest(HttpMethod.POST, "/hit", null, body);
+    protected <T, R> ResponseEntity<R> post(String path, T body, ParameterizedTypeReference<R> responseType) {
+        return makeAndSendRequest(HttpMethod.POST, path, null, body, responseType);
     }
 
-    private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path,
-                                                          @Nullable Map<String, Object> parameters, @Nullable T body) {
-        HttpEntity<T> requestEntity;
-
-        if (Objects.isNull(body)) {
-            requestEntity = null;
-        } else {
-            requestEntity = new HttpEntity<>(body);
-        }
-
-        ResponseEntity<Object> statsServerResponse;
+    private <T, R> ResponseEntity<R> makeAndSendRequest(HttpMethod method,
+                                                        String path,
+                                                        @Nullable Map<String, Object> parameters,
+                                                        @Nullable T body,
+                                                        ParameterizedTypeReference<R> responseType) {
+        HttpEntity<T> requestEntity = (body == null) ? null : new HttpEntity<>(body);
         try {
-            if (parameters != null) {
-                statsServerResponse = rest.exchange(path, method, requestEntity, Object.class, parameters);
-            } else {
-                statsServerResponse = rest.exchange(path, method, requestEntity, Object.class);
-            }
+            ResponseEntity<R> response = (parameters != null)
+                    ? rest.exchange(path, method, requestEntity, responseType, parameters)
+                    : rest.exchange(path, method, requestEntity, responseType);
+            return prepareResponse(response);
         } catch (HttpStatusCodeException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
+            return ResponseEntity.status(e.getStatusCode()).build();
         }
-        return prepareResponse(statsServerResponse);
     }
 
-    private static ResponseEntity<Object> prepareResponse(ResponseEntity<Object> response) {
+    private static <R> ResponseEntity<R> prepareResponse(ResponseEntity<R> response) {
         if (response.getStatusCode().is2xxSuccessful()) {
             return response;
         }
