@@ -180,10 +180,6 @@ public class PrivateEventServiceImpl implements PrivateEventService {
 
         List<ParticipationRequest> participationRequestList = participationRequestRepository.findByEventId(eventId);
 
-        if (participationRequestList.isEmpty()) {
-            return new ArrayList<>();
-        }
-
         return participationRequestList.stream()
                 .map(ParticipationRequestMapper::toParticipationRequestDto)
                 .toList();

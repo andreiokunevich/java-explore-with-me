@@ -1,6 +1,5 @@
 package ru.practicum.event.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -23,11 +22,10 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.exception.ValidationException;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ru.practicum.util.Constant.DATE_TIME_FORMAT;
+import static ru.practicum.util.Constant.FORMATTER;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +35,8 @@ public class PublicEventServiceImpl implements PublicEventService {
     private final EventRepository eventRepository;
     private final StatsClient statsClient;
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
     private static final Long PLUS_YEARS_IF_RANGE_END_NULL = 10L;
     private static final String APP_NAME = "ewm-main-service";
-    private final ObjectMapper objectMapper;
 
     @Override
     public List<EventShortDto> getAllEvents(String text, List<Long> categories, Boolean paid, String rangeStart,

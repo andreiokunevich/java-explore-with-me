@@ -5,7 +5,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.exception.ConflictException;
 import ru.practicum.user.dto.NewUserRequest;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.mapper.UserMapper;
@@ -39,9 +38,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(NewUserRequest newUserRequest) {
-        if (userRepository.findByEmail(newUserRequest.getEmail()).isPresent()) {
-            throw new ConflictException("Пользователь с таким email уже существует.");
-        }
 
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(newUserRequest)));
     }

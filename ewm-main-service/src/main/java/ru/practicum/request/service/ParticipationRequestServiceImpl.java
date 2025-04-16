@@ -18,7 +18,6 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,10 +36,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .orElseThrow(() -> new NotFoundException("Пользователь с id = " + userId + " не найден."));
 
         List<ParticipationRequest> requestsList = participationRequestRepository.findByRequesterId(userId);
-
-        if (requestsList.isEmpty()) {
-            return new ArrayList<>();
-        }
 
         return requestsList.stream()
                 .map(ParticipationRequestMapper::toParticipationRequestDto)
@@ -67,7 +62,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         ParticipationRequest requestCheck = participationRequestRepository.findByRequesterIdAndEventId(userId, eventId);
 
         if (requestCheck != null) {
-            throw new ConflictException("Запрос на участии в мероприятии от данного пользовтаеля уже существует.");
+            throw new ConflictException("Запрос на участие в мероприятии от данного пользователя уже существует.");
         }
 
         ParticipationRequest request = new ParticipationRequest();

@@ -27,12 +27,11 @@ import ru.practicum.user.model.User;
 import ru.practicum.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ru.practicum.util.Constant.DATE_TIME_FORMAT;
+import static ru.practicum.util.Constant.FORMATTER;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +44,6 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final LocationRepository locationRepository;
     private final ParticipationRequestRepository participationRequestRepository;
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
     private static final Sort SORT_BY_ID_ASC = Sort.by("id").ascending();
     private static final Long MAX_HOURS_BEFORE_START_EVENT = 1L;
 

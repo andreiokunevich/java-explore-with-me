@@ -23,8 +23,8 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
 
     @Override
     public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
-        if (categoryRepository.findAll().contains(CategoryMapper.toCategory(newCategoryDto))) {
-            throw new ConflictException("Данная категория уже существует.");
+        if (categoryRepository.existsByName(newCategoryDto.getName())) {
+            throw new ConflictException("Категория " + newCategoryDto.getName() + " уже существует.");
         }
 
         return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.toCategory(newCategoryDto)));
@@ -42,9 +42,7 @@ public class CategoryAdminServiceImpl implements CategoryAdminService {
     public CategoryDto updateCategory(Long catId, NewCategoryDto newCategoryDto) {
         Category category = categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категории с id = " + catId + " не существует."));
-        if (newCategoryDto.getName() != null) {
-            category.setName(newCategoryDto.getName());
-        }
+        category.setName(newCategoryDto.getName());
 
         return CategoryMapper.toCategoryDto(categoryRepository.save(category));
     }

@@ -1,7 +1,6 @@
 package ru.practicum.request.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,12 +22,10 @@ public class ParticipationRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id")
     private User requester;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
@@ -36,7 +33,6 @@ public class ParticipationRequest {
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
-    @NotNull
     @Column(name = "created")
     private LocalDateTime created;
 }
