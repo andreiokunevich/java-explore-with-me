@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import ru.practicum.user.dto.NewUserRequest;
 import ru.practicum.user.dto.UserCommentDto;
 import ru.practicum.user.dto.UserDto;
-import ru.practicum.user.dto.UserShortDto;
 import ru.practicum.user.model.User;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
