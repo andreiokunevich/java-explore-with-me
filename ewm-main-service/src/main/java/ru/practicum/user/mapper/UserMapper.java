@@ -3,6 +3,7 @@ package ru.practicum.user.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.user.dto.NewUserRequest;
+import ru.practicum.user.dto.UserCommentDto;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.model.User;
 
@@ -21,5 +22,10 @@ public class UserMapper {
         user.setName(newUserRequest.getName());
         user.setEmail(newUserRequest.getEmail());
         return user;
+    }
+
+    public static UserCommentDto toUserCommentDto(User user) {
+
+        return new UserCommentDto(user.getName());
     }
 }
